@@ -1,0 +1,62 @@
+name: Build and Release Spotify Notifications
+
+on:
+  workflow_dispatch:  # Only manual triggers
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Set up Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
+    - name: Build and Archive
+      run: |
+        xcodebuild -workspace "Spotify-Notifications.xcworkspace" \
+                  -scheme "Spotify Notifications" \
+                  -configuration Release \
+                  -archivePath "build/SpotifyNotifications.xcarchive" \
+                  archive
+
+    - name: Create exportOptions.plist
+      run: |
+        cat > exportOptions.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>method</key>
+            <string>mac-application</string>
+            <key>teamID</key>
+            <string>$(TEAM_ID)</string>
+        </dict>
+        </plist>
+        EOF
+
+    - name: Export Archive
+      run: |
+        xcodebuild -archivePath "build/SpotifyNotifications.xcarchive" \
+                  -exportArchive \
+                  -exportPath "build/export" \
+                  -exportOptionsPlist exportOptions.plist
+
+    - name: Zip the app
+      run: |
+        cd build/export
+        zip -r "Spotify-Notifications.zip" "Spotify Notifications.app"
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/export/Spotify-Notifications.zip
+        tag_name: release-${{ github.run_number }}  # Simple incrementing number
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
