@@ -1,7 +1,7 @@
 name: Build and Release Spotify Notifications
 
 on:
-  workflow_dispatch:  # Only manual triggers
+  workflow_dispatch:
 
 jobs:
   build:
@@ -35,8 +35,8 @@ jobs:
         <dict>
             <key>method</key>
             <string>mac-application</string>
-            <key>teamID</key>
-            <string>$(TEAM_ID)</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
         </dict>
         </plist>
         EOF
@@ -48,6 +48,10 @@ jobs:
                   -exportPath "build/export" \
                   -exportOptionsPlist exportOptions.plist
 
+    - name: Create Ad-Hoc Signature
+      run: |
+        codesign --force --deep --sign - "build/export/Spotify Notifications.app"
+
     - name: Zip the app
       run: |
         cd build/export
@@ -57,6 +61,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: build/export/Spotify-Notifications.zip
-        tag_name: release-${{ github.run_number }}  # Simple incrementing number
+        tag_name: release-${{ github.run_number }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
