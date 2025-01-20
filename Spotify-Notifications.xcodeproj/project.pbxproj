@@ -250,6 +250,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				cs,
 				de,
@@ -450,7 +451,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Spotify-Notifications/MASShortcut/**";
 				INFOPLIST_FILE = "Spotify-Notifications/Spotify Notifications-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.citruspi.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -475,7 +476,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Spotify-Notifications/MASShortcut/**";
 				INFOPLIST_FILE = "Spotify-Notifications/Spotify Notifications-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.citruspi.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
